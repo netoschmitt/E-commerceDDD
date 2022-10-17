@@ -21,6 +21,8 @@ namespace Entities.Notifications
         [NotMapped]
         public List<Notifies> Notitycoes { get; set; }
 
+
+
         // validaçao todos campos/obj no dominio
         public bool ValidaPropriedadeString(string valor, string nomepropriedade)
         {
