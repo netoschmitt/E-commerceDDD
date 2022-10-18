@@ -39,26 +39,21 @@ namespace Infraestrutura.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    USR_CPF = table.Column<string>(maxLength: 50, nullable: true),
+                    USR_IDADE = table.Column<int>(nullable: false),
+                    USR_NOME = table.Column<string>(maxLength: 255, nullable: true),
+                    USR_CEP = table.Column<string>(maxLength: 10, nullable: true),
+                    USR_ENDERECO = table.Column<string>(maxLength: 255, nullable: true),
+                    USR_COMPLEMENTO_ENDERECO = table.Column<string>(maxLength: 450, nullable: true),
+                    USR_CELULAR = table.Column<string>(maxLength: 20, nullable: true),
+                    USR_TELEFONE = table.Column<string>(maxLength: 20, nullable: true),
+                    USR_ESTADO = table.Column<bool>(nullable: false),
+                    USR_TIPO = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Product",
-                columns: table => new
-                {
-                    PRD_ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PRD_NOME = table.Column<string>(nullable: true),
-                    PRD_VALOR = table.Column<decimal>(nullable: false),
-                    PRD_ESTADO = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Product", x => x.PRD_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,6 +162,33 @@ namespace Infraestrutura.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Product",
+                columns: table => new
+                {
+                    PRD_ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PRD_NOME = table.Column<string>(maxLength: 255, nullable: true),
+                    PRD_DESCRICAO = table.Column<string>(maxLength: 150, nullable: true),
+                    PRD_OBSERVACAO = table.Column<string>(maxLength: 2000, nullable: true),
+                    PRD_VALOR = table.Column<decimal>(nullable: false),
+                    PRD_QTD_ESTOQUE = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    PRD_ESTADO = table.Column<bool>(nullable: false),
+                    PRD_DATA_CADASTRO = table.Column<DateTime>(nullable: false),
+                    PRD_DATA_ALTERACAO = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product", x => x.PRD_ID);
+                    table.ForeignKey(
+                        name: "FK_Product_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -205,6 +227,11 @@ namespace Infraestrutura.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Product_UserId",
+                table: "Product",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

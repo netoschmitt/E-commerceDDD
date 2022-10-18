@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestrutura.Migrations
 {
     [DbContext(typeof(ContextBase))]
-    [Migration("20221018201446_InitialCreate")]
+    [Migration("20221018231938_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,6 +29,26 @@ namespace Infraestrutura.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("CEP")
+                        .HasColumnName("USR_CEP")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("CPF")
+                        .HasColumnName("USR_CPF")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Celular")
+                        .HasColumnName("USR_CELULAR")
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("ComplementoEndereco")
+                        .HasColumnName("USR_COMPLEMENTO_ENDERECO")
+                        .HasColumnType("nvarchar(450)")
+                        .HasMaxLength(450);
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -40,11 +60,29 @@ namespace Infraestrutura.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Endereco")
+                        .HasColumnName("USR_ENDERECO")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<bool>("Estado")
+                        .HasColumnName("USR_ESTADO")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Idade")
+                        .HasColumnName("USR_IDADE")
+                        .HasColumnType("int");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Nome")
+                        .HasColumnName("USR_NOME")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")
@@ -65,6 +103,15 @@ namespace Infraestrutura.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefone")
+                        .HasColumnName("USR_TELEFONE")
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<int>("Tipo")
+                        .HasColumnName("USR_TIPO")
+                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -94,19 +141,47 @@ namespace Infraestrutura.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("DataAlteracao")
+                        .HasColumnName("PRD_DATA_ALTERACAO")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnName("PRD_DATA_CADASTRO")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnName("PRD_DESCRICAO")
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
                     b.Property<bool>("Estado")
                         .HasColumnName("PRD_ESTADO")
                         .HasColumnType("bit");
 
                     b.Property<string>("Nome")
                         .HasColumnName("PRD_NOME")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Observacao")
+                        .HasColumnName("PRD_OBSERVACAO")
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("QtdEstoque")
+                        .HasColumnName("PRD_QTD_ESTOQUE")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Valor")
                         .HasColumnName("PRD_VALOR")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Product");
                 });
@@ -244,6 +319,13 @@ namespace Infraestrutura.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Entities.Entities.Produto", b =>
+                {
+                    b.HasOne("Entities.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
